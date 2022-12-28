@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { Link } from "react-router-dom";
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const {
@@ -15,11 +16,9 @@ const Login = () => {
     <div>
       <div className="">
         <div className="">
-          <div className="card w-full max-w-sm shadow-2xl">
+          <div className="card w-96 shadow-2xl mx-auto my-10">
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
-              <h1 className="text-2xl font-medium text-center">
-                Login Here
-              </h1>
+              <h1 className="text-2xl font-medium text-center">Login Here</h1>
               <hr />
               <div className="form-control">
                 <label className="label">
@@ -32,7 +31,7 @@ const Login = () => {
                     required: true,
                     pattern: /^\S+@\S+$/i,
                   })}
-                  className="border p-2 rounded-md text-xs"
+                  className="border p-2 rounded-md text-xs ransition ease-in-out hover:-translate-y-1 hover:scale-110 focus:-translate-y-1 focus:scale-110 duration-75"
                 />
                 <span className="text-error ml-1">error</span>
               </div>
@@ -46,7 +45,7 @@ const Login = () => {
                     minLength={6}
                     type={showPass ? "text" : "password"}
                     placeholder="password"
-                    className="border p-2 rounded-md w-full text-xs font-medium"
+                    className="border p-2 rounded-md text-xs w-full ransition ease-in-out hover:-translate-y-1 hover:scale-110 focus:-translate-y-1 focus:scale-110 duration-75"
                     {...register("Passeord", {
                       required: true,
                     })}
@@ -90,7 +89,7 @@ const Login = () => {
                 </div>
                 <p className="mt-3">
                   Don't have an account?
-                  <span className="link ml-2">Register</span>
+                  <Link to='/register' className="link ml-2">Register</Link>
                 </p>
               </div>
             </form>

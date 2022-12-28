@@ -1,6 +1,7 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [showPass, setShowPass] = useState(false);
@@ -21,7 +22,7 @@ const Register = () => {
     <div>
       <div className="">
         <div className="">
-          <div className="card w-96 shadow-2xl mx-auto">
+          <div className="card w-96 shadow-2xl mx-auto my-10">
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
               <h1 className="text-2xl font-medium text-center">
                 Register Here
@@ -94,7 +95,7 @@ const Register = () => {
                   {...register("Picture", {
                     required: true,
                   })}
-                  className="border p-2 rounded-md text-xs bg-blue-50 cursor-pointer transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-75"
+                  className="file:p-1 file:px-3  file:rounded-xl border p-2 rounded-md text-xs bg-blue-50 cursor-pointer transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-75"
                 />
               </div>
               <div className="form-control mt-6">
@@ -117,7 +118,9 @@ const Register = () => {
                 </div>
                 <p className="mt-3">
                   Don't have an account?
-                  <span className="link ml-2">Login</span>
+                  <Link to="/login" className="link ml-2">
+                    Login
+                  </Link>
                 </p>
               </div>
             </form>

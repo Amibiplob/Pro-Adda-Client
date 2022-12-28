@@ -1,10 +1,12 @@
 import React from "react";
-import Navbar from "./Navbar";
+import Post from "./Share Page/Post";
+import PostDetails from "./Share Page/PostDetails";
 
 const Home = () => {
   return (
     <div>
-      <Navbar></Navbar>
+<Post></Post>
+<PostDetails></PostDetails>
     </div>
   );
 };
