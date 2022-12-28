@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import google from '../Img/google.png'
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const {
@@ -18,6 +17,10 @@ const Login = () => {
         <div className="">
           <div className="card w-full max-w-sm shadow-2xl">
             <form onSubmit={handleSubmit(onSubmit)} className="card-body">
+              <h1 className="text-2xl font-medium text-center">
+                Login Here
+              </h1>
+              <hr />
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
@@ -70,7 +73,7 @@ const Login = () => {
               <div className="form-control mt-6">
                 <input
                   type="submit"
-                  className="border border-sky-700 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-xl p-1 text-xl cursor-pointer"
+                  className="border border-sky-700 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-xl p-1 text-xl cursor-pointer transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-75"
                 />
               </div>
               <div>
@@ -85,7 +88,10 @@ const Login = () => {
                   </svg>
                   <p>Login with Google</p>
                 </div>
-                <p className="mt-3">Don't have an account?<span className="hover:link ml-2">Register</span></p>
+                <p className="mt-3">
+                  Don't have an account?
+                  <span className="link ml-2">Register</span>
+                </p>
               </div>
             </form>
           </div>

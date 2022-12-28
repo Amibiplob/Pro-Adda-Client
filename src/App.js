@@ -1,11 +1,12 @@
 import Home from "./Components/Pages/Home";
-import Login from "./Components/Pages/Login";
+import Register from "./Components/Pages/Register";
+
 
 function App() {
   return (
     <div className="md:mx-10">
       <Home></Home>
-      <Login></Login>
+<Register></Register>
     </div>
   );
 }
