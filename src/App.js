@@ -1,12 +1,10 @@
-import Home from "./Components/Pages/Home";
-import Register from "./Components/Pages/Register";
-
+import { RouterProvider } from "react-router-dom";
+import Router from "./Components/Route/Router";
 
 function App() {
   return (
     <div className="md:mx-10">
-      <Home></Home>
-<Register></Register>
+      <RouterProvider router={Router}></RouterProvider>
     </div>
   );
 }
