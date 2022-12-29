@@ -1,21 +1,54 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import React, { useState } from "react";
+import { updateProfile } from "firebase/auth";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../Context/UserContext";
 
 const Register = () => {
+  const { emailPasswordSignin ,auth} = useContext(AuthContext);
   const [showPass, setShowPass] = useState(false);
+  const [error, setError] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) =>{
-    const name =data.Name;
-    const email =data.Email;
-    const password =data.Password;
+  const onSubmit = (data) => {
+    const name = data.Name;
+    const email = data.Email;
+    const password = data.Password;
     console.log(data.Picture[0]);
-  }
+
+    if (!name || !email || !password) {
+      return;
+    }
+    emailPasswordSignin(email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        updateProfile(auth.currentUser, {
+          displayName: name,
+          photoURL: "https://i.ibb.co/vxpFHfX/avatar.png",
+        })
+          .then(() => {
+            // Profile updated!
+            setError("")
+     console.log(user)
+          })
+          .catch((error) => {
+            // An error occurred
+           console.log(error);
+          });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+    setError(errorCode)
+      });
+
+    console.log(data);
+  };
   console.log(errors);
 
   return (
@@ -36,11 +69,16 @@ const Register = () => {
                   type="text"
                   placeholder="Name"
                   {...register("Name", {
-                    required: true,
+                    required: "Name is required",
                   })}
+                  aria-invalid={errors.Name ? "true" : "false"}
                   className="border p-2 rounded-md text-xs ransition ease-in-out hover:-translate-y-1 hover:scale-110 focus:-translate-y-1 focus:scale-110 duration-75"
                 />
-                <span className="text-error ml-1">error</span>
+                {errors.Name && (
+                  <p role="alert" className="text-error ml-1">
+                    {errors.Name?.message}
+                  </p>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -50,12 +88,17 @@ const Register = () => {
                   type="email"
                   placeholder="Email"
                   {...register("Email", {
-                    required: true,
+                    required: "Email Address is required",
                     pattern: /^\S+@\S+$/i,
                   })}
+                  aria-invalid={errors.mail ? "true" : "false"}
                   className="border p-2 rounded-md text-xs ransition ease-in-out hover:-translate-y-1 hover:scale-110 focus:-translate-y-1 focus:scale-110 duration-75"
                 />
-                <span className="text-error ml-1">error</span>
+                {errors.Email && (
+                  <p role="alert" className="text-error ml-1">
+                    {errors.Email?.message}
+                  </p>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -68,9 +111,10 @@ const Register = () => {
                     type={showPass ? "text" : "password"}
                     placeholder="password"
                     className="border p-2 rounded-md text-xs w-full ransition ease-in-out hover:-translate-y-1 hover:scale-110 focus:-translate-y-1 focus:scale-110 duration-75"
-                    {...register("Passeord", {
-                      required: true,
+                    {...register("Password", {
+                      required: "Password is required",
                     })}
+                    aria-invalid={errors.Password ? "true" : "false"}
                   />
                   {showPass ? (
                     <EyeSlashIcon
@@ -83,7 +127,11 @@ const Register = () => {
                       className="h-6 w-6 absolute right-3 top-2"
                     />
                   )}
-                  <span className="text-error ml-1">error</span>
+                  {errors.Password && (
+                    <p role="alert" className="text-error ml-1">
+                      {errors.Password?.message}
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="form-control">
@@ -98,7 +146,10 @@ const Register = () => {
                   className="file:p-1 file:px-3  file:rounded-xl border p-2 rounded-md text-xs bg-blue-50 cursor-pointer transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-75"
                 />
               </div>
-              <div className="form-control mt-6">
+              <p role="alert" className="text-error ml-1">
+{error}
+              </p>
+              <div className="form-control mt-2">
                 <input
                   type="submit"
                   className="border border-sky-700 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-xl p-1 text-xl cursor-pointer transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-75"
