@@ -1,4 +1,4 @@
-import { HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/solid';
+import { ArrowTopRightOnSquareIcon, HandThumbDownIcon, HandThumbUpIcon } from '@heroicons/react/24/solid';
 import React from 'react';
 
 const Post = () => {
@@ -34,7 +34,10 @@ const Post = () => {
               <HandThumbDownIcon className="h-6 w-6 mx-2 text-red-500" />
               dislike
             </div>
-            <div className="badge w-full badge-outline p-3">Comment</div>
+            <div className="badge w-full badge-outline p-3">
+              Comment
+              <ArrowTopRightOnSquareIcon className="h-6 w-6 mx-2" />
+            </div>
           </div>
         </div>
         <hr />

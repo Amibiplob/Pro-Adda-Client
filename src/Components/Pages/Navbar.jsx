@@ -20,6 +20,11 @@ const Navbar = () => {
               )}
             </NavLink>
 
+            <NavLink to="/messages">
+              {({ isActive }) => (
+                <span className={isActive ? "shadow-md p-1 bg-teal-50 rounded text-teal-600 hover:text-teal-800" : "shadow-sm hover:shadow-md p-1 hover:bg-teal-50 rounded"}>Messages(0)</span>
+              )}
+            </NavLink>
             <NavLink to="/profile">
               {({ isActive }) => (
                 <span className={isActive ? "shadow-md p-1 bg-teal-50 rounded text-teal-600 hover:text-teal-800" : "shadow-sm hover:shadow-md p-1 hover:bg-teal-50 rounded"}>Profile</span>
