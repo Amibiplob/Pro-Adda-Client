@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { Link } from "react-router-dom";
+import { GoogleAuthProvider } from "firebase/auth";
+import { AuthContext } from "../Context/UserContext";
 const Login = () => {
+  
   const [showPass, setShowPass] = useState(false);
+
+  const googleProvider = new GoogleAuthProvider();
+  const {     googleSignIn } = useContext(AuthContext);
+
+
   const {
     register,
     handleSubmit,
@@ -11,6 +19,33 @@ const Login = () => {
   } = useForm();
   const onSubmit = (data) => console.log(data);
   console.log(errors);
+
+const signinWithGoogle=()=>{
+  googleSignIn(googleProvider)
+    .then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+console.log(user)
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+    });
+
+}
+
+
+
+
 
   return (
     <div>
@@ -77,7 +112,7 @@ const Login = () => {
               </div>
               <div>
                 <h1 className="divider">Login with social accounts</h1>
-                <div className="flex items-center gap-2 p-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 cursor-pointer rounded-md">
+                <div onClick={signinWithGoogle} className="flex items-center gap-2 p-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 cursor-pointer rounded-md">
                   <svg
                     className="w-6 h-6"
                     xmlns="http://www.w3.org/2000/svg"

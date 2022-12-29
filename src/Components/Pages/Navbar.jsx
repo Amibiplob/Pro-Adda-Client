@@ -1,9 +1,28 @@
 import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../Context/UserContext";
+import {  signOut } from "firebase/auth";
 
 const Navbar = () => {
-  const { user } = useContext(AuthContext);
+  const { user,auth } = useContext(AuthContext);
+
+console.log(user);
+const logOut=()=>{
+  signOut(auth)
+    .then(() => {
+      // Sign-out successful.
+      console.log("object");
+    })
+    .catch((error) => {
+      // An error happened.
+    });
+
+}
+
+
+
+
+
   return (
     <div>
       <div className="navbar border-indigo-600 border-b-2">
@@ -30,7 +49,10 @@ const Navbar = () => {
                 <span className={isActive ? "shadow-md p-1 bg-teal-50 rounded text-teal-600 hover:text-teal-800" : "shadow-sm hover:shadow-md p-1 hover:bg-teal-50 rounded"}>Profile</span>
               )}
             </NavLink>
-            <NavLink to="/login">
+          {
+            user ?      <li onClick={logOut} className="shadow-sm hover:shadow-md px-1 cursor-pointer rounded hover:text-teal-800 hover:bg-teal-50">Log Out</li>
+:  <>
+<NavLink to="/login">
               {({ isActive }) => (
                 <span className={isActive ? "shadow-md p-1 bg-teal-50 rounded text-teal-600 hover:text-teal-800" : "shadow-sm hover:shadow-md p-1 hover:bg-teal-50 rounded"}>Login</span>
               )}
@@ -39,7 +61,8 @@ const Navbar = () => {
               {({ isActive }) => (
                 <span className={isActive ? "shadow-md p-1 bg-teal-50 rounded text-teal-600 hover:text-teal-800" : "shadow-sm hover:shadow-md p-1 hover:bg-teal-50 rounded"}>Register</span>
               )}
-            </NavLink>
+            </NavLink></>
+          }
           </ul>
         </div>
       </div>
