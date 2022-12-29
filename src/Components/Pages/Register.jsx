@@ -1,14 +1,18 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import { updateProfile } from "firebase/auth";
+import { GoogleAuthProvider, updateProfile } from "firebase/auth";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../Context/UserContext";
 
 const Register = () => {
-  const { emailPasswordSignin ,auth} = useContext(AuthContext);
+  const { createEmailPasswordSignin, googleSignIn, auth } =
+    useContext(AuthContext);
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
+  const [googleSigninError, setGoogleSigninError] = useState("");
+    const googleProvider = new GoogleAuthProvider();
+
   const {
     register,
     handleSubmit,
@@ -23,33 +27,67 @@ const Register = () => {
     if (!name || !email || !password) {
       return;
     }
-    emailPasswordSignin(email, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        updateProfile(auth.currentUser, {
-          displayName: name,
-          photoURL: "https://i.ibb.co/vxpFHfX/avatar.png",
-        })
-          .then(() => {
-            // Profile updated!
-            setError("")
-     console.log(user)
-          })
-          .catch((error) => {
-            // An error occurred
-           console.log(error);
-          });
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-    setError(errorCode)
-      });
+       createEmailPasswordSignin(email, password)
+           .then((userCredential) => {
+             // Signed in
+             const user = userCredential.user;
+             updateProfile(auth.currentUser, {
+               displayName: name,
+               photoURL: "https://i.ibb.co/vxpFHfX/avatar.png",
+             })
+               .then(() => {
+                 // Profile updated!
+                 setError("");
+                 console.log(user);
+               })
+               .catch((error) => {
+                 // An error occurred
+                 console.log(error);
+               });
+           })
+           .catch((error) => {
+             const errorCode = error.code;
+             const errorMessage = error.message;
+             setError(errorCode);
+           });
 
     console.log(data);
   };
   console.log(errors);
+
+
+
+
+
+const signinWithGoogle = () => {
+  googleSignIn(googleProvider)
+    .then((result) => {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+      // ...
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+setGoogleSigninError(errorCode)
+    });
+};
+
+
+
+
+
+
+
+
 
   return (
     <div>
@@ -147,7 +185,7 @@ const Register = () => {
                 />
               </div>
               <p role="alert" className="text-error ml-1">
-{error}
+                {error}
               </p>
               <div className="form-control mt-2">
                 <input
@@ -157,7 +195,13 @@ const Register = () => {
               </div>
               <div>
                 <h1 className="divider">Login with social accounts</h1>
-                <div className="flex items-center gap-2 p-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 cursor-pointer rounded-md transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-75">
+                <p role="alert" className="text-error ml-1">
+                  {googleSigninError}
+                </p>
+                <div
+                  onClick={signinWithGoogle}
+                  className="flex items-center gap-2 p-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 cursor-pointer rounded-md transition ease-in-out hover:-translate-y-1 hover:scale-110 duration-75"
+                >
                   <svg
                     className="w-6 h-6"
                     xmlns="http://www.w3.org/2000/svg"

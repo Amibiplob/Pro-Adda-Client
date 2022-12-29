@@ -7,9 +7,10 @@ import { AuthContext } from "../Context/UserContext";
 const Login = () => {
   
   const [showPass, setShowPass] = useState(false);
-
+  const [error, setError] = useState("");
+  const [googleSigninError, setGoogleSigninError] = useState("");
   const googleProvider = new GoogleAuthProvider();
-  const {     googleSignIn } = useContext(AuthContext);
+  const { googleSignIn, emailPasswordSignin } = useContext(AuthContext);
 
 
   const {
@@ -18,8 +19,28 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    
+        const email = data.Email;
+        const password = data.Password;
+          if (!email || !password) {
+            return;
+          }
     console.log(data);
+
+  emailPasswordSignin(email,password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+    console.log(user)
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
+
+
+
+
+
   }
   console.log(errors);
 
@@ -44,7 +65,7 @@ const signinWithGoogle=()=>{
     const email = error.customData.email;
     // The AuthCredential type that was used.
     const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
+setGoogleSigninError(errorCode)
   });
 
 }
@@ -70,12 +91,17 @@ const signinWithGoogle=()=>{
                   type="email"
                   placeholder="Email"
                   {...register("Email", {
-                    required: true,
+                    required: "Name is required",
                     pattern: /^\S+@\S+$/i,
                   })}
+                  aria-invalid={errors.Name ? "true" : "false"}
                   className="border p-2 rounded-md text-xs ransition ease-in-out hover:-translate-y-1 hover:scale-110 focus:-translate-y-1 focus:scale-110 duration-75"
                 />
-                <span className="text-error ml-1">error</span>
+                {errors.Email && (
+                  <p role="alert" className="text-error ml-1">
+                    {errors.Email?.message}
+                  </p>
+                )}
               </div>
               <div className="form-control">
                 <label className="label">
@@ -88,9 +114,10 @@ const signinWithGoogle=()=>{
                     type={showPass ? "text" : "password"}
                     placeholder="password"
                     className="border p-2 rounded-md text-xs w-full ransition ease-in-out hover:-translate-y-1 hover:scale-110 focus:-translate-y-1 focus:scale-110 duration-75"
-                    {...register("Passeord", {
-                      required: true,
+                    {...register("Password", {
+                      required: "Password is required",
                     })}
+                    aria-invalid={errors.Password ? "true" : "false"}
                   />
                   {showPass ? (
                     <EyeSlashIcon
@@ -103,7 +130,11 @@ const signinWithGoogle=()=>{
                       className="h-6 w-6 absolute right-3 top-2"
                     />
                   )}
-                  <span className="text-error ml-1">error</span>
+                  {errors.Password && (
+                    <p role="alert" className="text-error ml-1">
+                      {errors.Password?.message}
+                    </p>
+                  )}
                 </div>
                 <label className="label">
                   <a href="/" className="label-text-alt link link-hover">
@@ -119,7 +150,13 @@ const signinWithGoogle=()=>{
               </div>
               <div>
                 <h1 className="divider">Login with social accounts</h1>
-                <div onClick={signinWithGoogle} className="flex items-center gap-2 p-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 cursor-pointer rounded-md">
+                <p role="alert" className="text-error ml-1">
+                  {googleSigninError}
+                </p>
+                <div
+                  onClick={signinWithGoogle}
+                  className="flex items-center gap-2 p-2 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 cursor-pointer rounded-md"
+                >
                   <svg
                     className="w-6 h-6"
                     xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +168,9 @@ const signinWithGoogle=()=>{
                 </div>
                 <p className="mt-3">
                   Don't have an account?
-                  <Link to='/register' className="link ml-2">Register</Link>
+                  <Link to="/register" className="link ml-2">
+                    Register
+                  </Link>
                 </p>
               </div>
             </form>
