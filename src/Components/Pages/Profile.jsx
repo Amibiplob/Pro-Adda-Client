@@ -10,10 +10,10 @@ const Profile = () => {
     const [post, setPost] = useState([]);
     
     useEffect(() => {
-      fetch(`http://localhost:5000/personalpost?uid=${uid}`)
+      fetch(`https://pro-adda-server.vercel.app/personalpost?uid=${uid}`)
         .then((res) => res.json())
         .then((data) => setPost(data));
-    }, []);
+    }, [uid]);
 
 console.log(post)
 

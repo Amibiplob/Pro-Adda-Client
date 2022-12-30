@@ -2,7 +2,8 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { GoogleAuthProvider, updateProfile } from "firebase/auth";
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { AuthContext } from "../Context/UserContext";
 
 const Register = () => {
@@ -10,6 +11,8 @@ const Register = () => {
     useContext(AuthContext);
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState("");
+  const navigate =useNavigate()
+    const imgbbKey = process.env.REACT_APP_imgBB_key;
   const [googleSigninError, setGoogleSigninError] = useState("");
     const googleProvider = new GoogleAuthProvider();
 
@@ -22,23 +25,37 @@ const Register = () => {
     const name = data.Name;
     const email = data.Email;
     const password = data.Password;
-    console.log(data.Picture[0]);
+
 
     if (!name || !email || !password) {
       return;
     }
-       createEmailPasswordSignin(email, password)
+
+    const image = data.Picture[0];
+    const formData = new FormData();
+    formData.append("image", image);
+
+    fetch(`https://api.imgbb.com/1/upload?key=${imgbbKey}`, {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        const img =result.data.url
+               createEmailPasswordSignin(email, password)
            .then((userCredential) => {
              // Signed in
              const user = userCredential.user;
              updateProfile(auth.currentUser, {
                displayName: name,
-               photoURL: "https://i.ibb.co/vxpFHfX/avatar.png",
+               photoURL:img,
              })
                .then(() => {
                  // Profile updated!
                  setError("");
-                 console.log(user);
+            toast.success("Success");
+            navigate("/");
+
                })
                .catch((error) => {
                  // An error occurred
@@ -50,8 +67,7 @@ const Register = () => {
              const errorMessage = error.message;
              setError(errorCode);
            });
-
-    console.log(data);
+       })
   };
   console.log(errors);
 

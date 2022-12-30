@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GoogleAuthProvider } from "firebase/auth";
 import { AuthContext } from "../Context/UserContext";
+import { toast } from "react-toastify";
 const Login = () => {
   
   const [showPass, setShowPass] = useState(false);
@@ -11,7 +12,7 @@ const Login = () => {
   const [googleSigninError, setGoogleSigninError] = useState("");
   const googleProvider = new GoogleAuthProvider();
   const { googleSignIn, emailPasswordSignin } = useContext(AuthContext);
-
+const navigate =useNavigate();
 
   const {
     register,
@@ -30,11 +31,15 @@ const Login = () => {
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-    console.log(user)
+  toast.success("Success");
+  navigate("/")
+
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      setError(errorCode)
+        toast.error({errorMessage});
     });
 
 
@@ -56,7 +61,9 @@ const signinWithGoogle=()=>{
     const token = credential.accessToken;
     // The signed-in user info.
     const user = result.user;
-    // ...
+  toast.success("Success");
+  navigate("/");
+
   }).catch((error) => {
     // Handle Errors here.
     const errorCode = error.code;
@@ -142,6 +149,11 @@ setGoogleSigninError(errorCode)
                   </a>
                 </label>
               </div>
+              {error && (
+                <p role="alert" className="text-error ml-1">
+                  {error}
+                </p>
+              )}
               <div className="form-control mt-6">
                 <input
                   type="submit"

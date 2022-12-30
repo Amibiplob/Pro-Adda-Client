@@ -5,6 +5,7 @@ import Login from "../Pages/Login";
 import Messages from "../Pages/Messages";
 import Profile from "../Pages/Profile";
 import Register from "../Pages/Register";
+import PrivateRoute from "./PrivateRoute";
 import Root from "./Root";
 
 const Router = createBrowserRouter([
@@ -15,13 +16,21 @@ const Router = createBrowserRouter([
     children: [
       {
         path: "/",
-        loader: () => fetch("http://localhost:5000/post"),
-        element: <Home></Home>,
+        loader: () => fetch("https://pro-adda-server.vercel.app/post"),
+        element: (
+          <PrivateRoute>
+            <Home></Home>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/home",
-        loader: () => fetch("http://localhost:5000/post"),
-        element: <Home></Home>,
+        loader: () => fetch("https://pro-adda-server.vercel.app/post"),
+        element: (
+          <PrivateRoute>
+            <Home></Home>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/login",
@@ -33,11 +42,19 @@ const Router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <Profile></Profile>,
+        element: (
+          <PrivateRoute>
+            <Profile></Profile>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/messages",
-        element: <Messages></Messages>,
+        element: (
+          <PrivateRoute>
+            <Messages></Messages>
+          </PrivateRoute>
+        ),
       },
     ],
   },
