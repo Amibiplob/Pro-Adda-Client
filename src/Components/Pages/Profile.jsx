@@ -1,11 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/UserContext";
 import CreatePost from "./Share Page/CreatePost";
+import Post from "./Share Page/Post";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const { displayName, email, uid, photoURL, emailVerified } = user;
-  console.log(user)
+
+    const [post, setPost] = useState([]);
+    
+    useEffect(() => {
+      fetch(`http://localhost:5000/personalpost?uid=${uid}`)
+        .then((res) => res.json())
+        .then((data) => setPost(data));
+    }, []);
+
+console.log(post)
+
   return (
     <div>
       <div className="flex flex-col md:flex-row items-center md:justify-evenly gap-5 py-10 my-10 rounded-lg mx-auto shadow-lg md:w-1/2 bg-slate-200">
@@ -23,6 +34,7 @@ const Profile = () => {
         </div>
       </div>
       <CreatePost></CreatePost>
+      <Post data={post}></Post>
     </div>
   );
 };

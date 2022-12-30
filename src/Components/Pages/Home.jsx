@@ -1,12 +1,16 @@
 import React from "react";
+import { useLoaderData } from "react-router-dom";
+import CreatePost from "./Share Page/CreatePost";
 import Post from "./Share Page/Post";
-import PostDetails from "./Share Page/PostDetails";
 
 const Home = () => {
+
+const post =useLoaderData([])
+console.log(post)
   return (
     <div>
-<Post></Post>
-<PostDetails></PostDetails>
+      <CreatePost></CreatePost>
+      <Post data={post}></Post>
     </div>
   );
 };

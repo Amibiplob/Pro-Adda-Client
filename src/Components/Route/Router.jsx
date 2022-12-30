@@ -15,10 +15,12 @@ const Router = createBrowserRouter([
     children: [
       {
         path: "/",
+        loader: () => fetch("http://localhost:5000/post"),
         element: <Home></Home>,
       },
       {
         path: "/home",
+        loader: () => fetch("http://localhost:5000/post"),
         element: <Home></Home>,
       },
       {
@@ -35,7 +37,7 @@ const Router = createBrowserRouter([
       },
       {
         path: "/messages",
-        element: <Messages></Messages>
+        element: <Messages></Messages>,
       },
     ],
   },
